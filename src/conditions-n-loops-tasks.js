@@ -406,19 +406,16 @@ function rotateMatrix(matrix) {
  *  [-2, 9, 5, -3]  => [-3, -2, 5, 9]
  */
 function sortByAsc(arr) {
-  const sortedArr = arr;
-  for (let i = 0; i < sortedArr.length; i += 1) {
-    let indexMin = i;
-    for (let j = i + 1; j < sortedArr.length; j += 1) {
-      if (sortedArr[j] < sortedArr[indexMin]) {
-        indexMin = j;
-      }
+  const result = arr;
+  for (let i = 1; i < arr.length; i += 1) {
+    const current = arr[i];
+    let j = i - 1;
+    for (; j >= 0 && arr[j] > current; j -= 1) {
+      result[j + 1] = arr[j];
     }
-    const curr = sortedArr[i];
-    sortedArr[i] = sortedArr[indexMin];
-    sortedArr[indexMin] = curr;
+    result[j + 1] = current;
   }
-  return sortedArr;
+  return result;
 }
 
 /**
@@ -441,9 +438,9 @@ function sortByAsc(arr) {
 function shuffleChar(str, iterations) {
   let result = str;
   const strLength = str.length;
-  const neededIterations = iterations >= strLength ? strLength : iterations;
+  let effectiveIterations = iterations;
 
-  for (let i = 0; i < neededIterations; i += 1) {
+  for (let i = 1; i <= effectiveIterations; i += 1) {
     let strWithoutOdd = '';
     let oddChars = '';
     for (let j = 0; j < strLength; j += 1) {
@@ -454,6 +451,11 @@ function shuffleChar(str, iterations) {
       }
     }
     result = strWithoutOdd + oddChars;
+
+    if (str === result) {
+      effectiveIterations = iterations % i;
+      i = 0;
+    }
   }
 
   return result;
